@@ -11,4 +11,6 @@ spring:
     url: "jdbc:postgresql://localhost:5432/postgres"
     database-change-log-table: crm_databaseChangeLog
     database-change-log-lock-table: crm_databaseChangeLogLock
+jwt:
+  secret: secret123
 

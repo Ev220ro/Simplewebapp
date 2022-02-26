@@ -1,11 +1,10 @@
 package ru.rodionov.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.rodionov.spring.DTO.ClientDTO;
 import ru.rodionov.spring.DTO.UserDTO;
 import ru.rodionov.spring.exceptions.UserNotFoundException;
-import ru.rodionov.spring.model.Client;
 import ru.rodionov.spring.model.User;
 import ru.rodionov.spring.repository.UserRepository;
 
@@ -15,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     public List<UserDTO> getAll(){
             return userRepository.findAll().stream()
@@ -36,7 +37,7 @@ public class UserService {
         User user = new User().setCreatorId(userDTO.getCreatorId())
                 .setName(userDTO.getName())
                 .setLogin(userDTO.getLogin())
-                .setPassword(userDTO.getPassword())
+                .setPassword(passwordEncoder.encode(userDTO.getPassword()))
                 .setRole(userDTO.getRole());
         userRepository.save(user);
         return userDTO.setId(user.getId());
