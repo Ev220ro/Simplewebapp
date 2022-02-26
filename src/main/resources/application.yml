@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: postgres
+    password: postgres
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    user: postgres
+    password: postgres
+    change-log: /liquibase/changelog.xml
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    database-change-log-table: crm_databaseChangeLog
+    database-change-log-lock-table: crm_databaseChangeLogLock
+
