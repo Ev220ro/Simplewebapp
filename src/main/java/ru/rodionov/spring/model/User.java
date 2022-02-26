@@ -22,8 +22,7 @@ public class User {
     @Column
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
-    @Column
-    private Long creatorId;
-
+//    @Column
+//    private Long creatorId;
 
 }

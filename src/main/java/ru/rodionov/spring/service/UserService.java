@@ -28,13 +28,14 @@ public class UserService {
     public UserDTO getUserDTO(User user){
         return new UserDTO().setId(user.getId())
                 .setName(user.getName())
-                .setCreatorId(user.getCreatorId())
+//                .setCreatorId(user.getCreatorId())
                 .setLogin(user.getLogin())
                 .setPassword(user.getPassword())
                 .setRole(user.getRole());
     }
     public UserDTO create(UserDTO userDTO){
-        User user = new User().setCreatorId(userDTO.getCreatorId())
+        User user = new User()
+//                .setCreatorId(userDTO.getCreatorId())
                 .setName(userDTO.getName())
                 .setLogin(userDTO.getLogin())
                 .setPassword(passwordEncoder.encode(userDTO.getPassword()))
@@ -55,7 +56,7 @@ public class UserService {
     }
     private UserDTO getUser(UserDTO newUser, User user) {
         user.setName(user.getName());
-        user.setCreatorId(user.getCreatorId());
+//        user.setCreatorId(user.getCreatorId());
         user.setLogin(user.getLogin());
         user.setPassword(user.getPassword());
         user.setRole(user.getRole());

@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Data
 @Entity
-@Table(name = "Clients")
+@Table(name = "CLIENTS")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

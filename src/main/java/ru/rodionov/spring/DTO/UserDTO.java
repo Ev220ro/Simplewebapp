@@ -12,5 +12,5 @@ public class UserDTO {
     private String password;
     private String name;
     private UserRole role;
-    private Long creatorId;
+//    private Long creatorId;
 }
