@@ -7,4 +7,5 @@
     <include file="sql/V1_ddl_create_users.sql" relativeToChangelogFile="true"/>
     <include file="sql/V2_ddl_create_clients.sql" relativeToChangelogFile="true"/>
     <include file="sql/V3_ddl_create_transactions.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V4_ddl_create_actions.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

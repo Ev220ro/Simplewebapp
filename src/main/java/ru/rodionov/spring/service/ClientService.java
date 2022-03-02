@@ -28,8 +28,8 @@ public class ClientService {
     }
 
     private ClientDTO getClientDTO(Client client) {
-        return new ClientDTO().setClientId(client.getClientId())
-                .setUserId(client.getUserId())
+        return new ClientDTO().setClientId(client.getId())
+       //         .setUserId(client.getUserId())
                 .setName(client.getName())
                 .setSurname(client.getSurname())
                 .setPhone(client.getPhone())
@@ -38,14 +38,15 @@ public class ClientService {
 
 
     public ClientDTO create(ClientDTO clientDTO) {
-        Client client = new Client().setUserId(clientDTO.getUserId())
+        Client client = new Client()
+                //.setUserId(clientDTO.getUserId())
                 .setName(clientDTO.getName())
                 .setStatus(clientDTO.getStatus())
                 .setPhone(clientDTO.getPhone())
                 .setSurname(clientDTO.getSurname());
 
         clientRepository.save(client);
-        return clientDTO.setClientId(client.getClientId());
+        return clientDTO.setClientId(client.getId());
     }
 
     public ClientDTO getById(Long id) {
@@ -65,9 +66,9 @@ public class ClientService {
         client.setSurname(newClient.getSurname());
         client.setPhone(newClient.getPhone());
         client.setStatus(newClient.getStatus());
-        client.setUserId(newClient.getUserId());
+   //     client.setUserId(newClient.getUserId());
         clientRepository.save(client);
-        return newClient.setClientId(client.getClientId());
+        return newClient.setClientId(client.getId());
     }
 
 

@@ -3,9 +3,11 @@
 
 CREATE TABLE transactions
 (
-    transaction_id      BIGSERIAL PRIMARY KEY,
-    dateTimeTransaction varchar(25) NOT NULL,
-    sum                 real        NOT NULL,
-    transactionType     varchar(15) NOT NULL,
-    client_id           BIGINT      NOT NULL
-)
+    id        BIGSERIAL PRIMARY KEY,
+    date_time timestamp      NOT NULL DEFAULT now(),
+    amount    DECIMAL(10, 2) NOT NULL,
+    type      varchar(15)    NOT NULL,
+    client_id BIGINT         NOT NULL
+);
+ALTER TABLE transactions
+    ADD CONSTRAINT FK_client_id FOREIGN KEY (client_id) REFERENCES clients (id);

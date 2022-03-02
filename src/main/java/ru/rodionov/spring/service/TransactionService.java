@@ -2,11 +2,8 @@ package ru.rodionov.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.rodionov.spring.DTO.TransactionDTO;
 import ru.rodionov.spring.exceptions.TransactionNotFoundException;
-import ru.rodionov.spring.model.Client;
 import ru.rodionov.spring.model.Transaction;
 import ru.rodionov.spring.repository.TransactionRepository;
 
@@ -30,20 +27,20 @@ public class TransactionService {
 
     }
     public TransactionDTO getTransactionDTO(Transaction transaction){
-        return new TransactionDTO().setTransactionType(transaction.getTransactionType())
-                .setDateTimeTransaction(transaction.getDateTimeTransaction())
-                .setClientId(transaction.getClientId())
-                .setSum(transaction.getSum())
-                .setTransactionId(transaction.getTransactionId());
+        return new TransactionDTO().setTransactionType(transaction.getType())
+                .setDateTimeTransaction(transaction.getDateTime())
+                .setClientId(transaction.getClient().getId())
+                .setSum(transaction.getAmount())
+                .setTransactionId(transaction.getId());
     }
 
     public TransactionDTO create(TransactionDTO transactionDTO) {
-           Transaction transaction = new Transaction().setDateTimeTransaction(transactionDTO.getDateTimeTransaction())
-                   .setTransactionType(transactionDTO.getTransactionType())
-                   .setSum(transactionDTO.getSum())
-                   .setClientId(transactionDTO.getClientId());
+           Transaction transaction = new Transaction().setDateTime(transactionDTO.getDateTimeTransaction())
+                   .setType(transactionDTO.getTransactionType())
+                   .setAmount(transactionDTO.getSum());
+          // найти клиента по client_id и положить сюда        .setClient(transactionDTO.getClient());
            transactionRepository.save(transaction);
-           return transactionDTO.setTransactionId(transaction.getTransactionId());
+           return transactionDTO.setTransactionId(transaction.getId());
     }
 
 
@@ -61,12 +58,12 @@ public class TransactionService {
     }
 
     public TransactionDTO getTransaction(TransactionDTO newTransactionDTO, Transaction transaction){
-        transaction.setTransactionType(transaction.getTransactionType());
-        transaction.setSum(transaction.getSum());
-        transaction.setDateTimeTransaction(transaction.getDateTimeTransaction());
-        transaction.setClientId(transaction.getClientId());
+        transaction.setType(transaction.getType());
+        transaction.setAmount(transaction.getAmount());
+        transaction.setDateTime(transaction.getDateTime());
+//        transaction.setClientId(transaction.getClientId());
         transactionRepository.save(transaction);
-        return newTransactionDTO.setTransactionId(transaction.getTransactionId());
+        return newTransactionDTO.setTransactionId(transaction.getId());
     }
 
 

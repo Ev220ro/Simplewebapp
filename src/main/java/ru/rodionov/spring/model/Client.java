@@ -3,17 +3,19 @@ package ru.rodionov.spring.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.rodionov.spring.enums.ClientStatus;
-import ru.rodionov.spring.repository.ClientRepository;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Accessors(chain = true)
 @Data
 @Entity
-@Table(name = "CLIENTS")
+@Table(name = "clients")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long clientId;
+    private Long id;
     @Column
     private String name;
     @Column
@@ -23,7 +25,11 @@ public class Client {
     @Column
     @Enumerated(value = EnumType.STRING)
     private ClientStatus status;
-    @Column
-    private Long userId;
-
+//    @Column
+//    private Long userId;
+    @OneToMany(mappedBy = "client")
+    private List<Transaction> transactionList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

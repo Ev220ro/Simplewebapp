@@ -5,6 +5,9 @@ import lombok.experimental.Accessors;
 import ru.rodionov.spring.enums.UserRole;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Accessors(chain = true)
 @Data
 @Entity
@@ -22,7 +25,9 @@ public class User {
     @Column
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
-//    @Column
-//    private Long creatorId;
+    @Column
+    private Long creatorId;
+    @OneToMany(mappedBy = "user")
+    private List<Client> clientList = new ArrayList<>();
 
 }

@@ -2,11 +2,11 @@ package ru.rodionov.spring.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.rodionov.spring.enums.TransactionType;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+
 @Accessors(chain = true)
 @Data
 @Entity
@@ -15,16 +15,17 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long transactionId;
+    private Long id;
     @Column
-    private String dateTimeTransaction;
+    private String dateTime;
     @Column
-    private double sum;
+    private BigDecimal  amount;
     @Column
     @Enumerated(value = EnumType.STRING)
-    private TransactionType transactionType;
-    @Column
-    private Long clientId;
+    private TransactionType type;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 }
 
 

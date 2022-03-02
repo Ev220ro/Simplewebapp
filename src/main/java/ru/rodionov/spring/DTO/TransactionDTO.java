@@ -3,6 +3,9 @@ package ru.rodionov.spring.DTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.rodionov.spring.enums.TransactionType;
+
+import java.math.BigDecimal;
+
 @Accessors(chain = true)
 @Data
 public class TransactionDTO {
@@ -11,7 +14,7 @@ public class TransactionDTO {
 
     private String dateTimeTransaction;
 
-    private double sum;
+    private BigDecimal sum;
 
     private TransactionType transactionType;
 
