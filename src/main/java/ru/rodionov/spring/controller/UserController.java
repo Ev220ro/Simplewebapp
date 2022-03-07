@@ -1,12 +1,15 @@
 package ru.rodionov.spring.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.rodionov.spring.DTO.UserDTO;
 import ru.rodionov.spring.service.UserService;
 
 import java.util.List;
-
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -23,9 +26,10 @@ public class UserController {
         return userService.getAll();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public UserDTO create(@RequestBody UserDTO userDTO) {
-        return userService.create(userDTO);
+    public UserDTO create(@RequestBody UserDTO userDTO, Authentication auth) {
+        return userService.create(userDTO, auth.getName());
     }
 
     @GetMapping("{id}")
@@ -52,6 +56,9 @@ public class UserController {
 
     //Добавить сервисы
     //git
+    //отдельный проект авторизация - > логаут (одна сущность)
+    //расписать ролевую модель (кто что может делать? добавить проверки ролевой модели)
+
 
 
 }

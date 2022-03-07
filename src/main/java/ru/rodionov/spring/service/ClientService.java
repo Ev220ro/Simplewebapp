@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.rodionov.spring.DTO.ClientDTO;
 import ru.rodionov.spring.exceptions.ClientNotFoundException;
 import ru.rodionov.spring.model.Client;
+import ru.rodionov.spring.model.User;
 import ru.rodionov.spring.repository.ClientRepository;
+import ru.rodionov.spring.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,21 +18,23 @@ import java.util.stream.Collectors;
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, UserRepository userRepository) {
         this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<ClientDTO> getAll() {
-        return clientRepository.findAll().stream()
+    public List<ClientDTO> getAll(String login) {
+
+        return clientRepository.findAllByUser_Login(login).stream()
                 .map(this::getClientDTO)
                 .collect(Collectors.toList());
     }
 
     private ClientDTO getClientDTO(Client client) {
-        return new ClientDTO().setClientId(client.getId())
-       //         .setUserId(client.getUserId())
+        return new ClientDTO().setId(client.getId())
                 .setName(client.getName())
                 .setSurname(client.getSurname())
                 .setPhone(client.getPhone())
@@ -37,26 +42,27 @@ public class ClientService {
     }
 
 
-    public ClientDTO create(ClientDTO clientDTO) {
+    public ClientDTO create(ClientDTO clientDTO, String login) {
+        User user = userRepository.findByLogin(login).get();
         Client client = new Client()
-                //.setUserId(clientDTO.getUserId())
+                .setUser(user)
                 .setName(clientDTO.getName())
                 .setStatus(clientDTO.getStatus())
                 .setPhone(clientDTO.getPhone())
                 .setSurname(clientDTO.getSurname());
 
         clientRepository.save(client);
-        return clientDTO.setClientId(client.getId());
+        return clientDTO.setId(client.getId());
     }
 
-    public ClientDTO getById(Long id) {
-        return clientRepository.findById(id)
+    public ClientDTO getById(Long id, String login) {
+        return clientRepository.findByIdAndUser_Login(id, login)
                 .map(this::getClientDTO)
                 .orElseThrow(() -> new ClientNotFoundException("Not found " + id));
     }
 
-    public ClientDTO updateClient(ClientDTO newClient, Long id) {
-        return clientRepository.findById(id)
+    public ClientDTO updateClient(ClientDTO newClient, Long id, String login) {
+        return clientRepository.findByIdAndUser_Login(id, login)
                 .map(client -> getClient(newClient, client))
                 .orElseThrow(() -> new ClientNotFoundException("Not found " + id));
     }
@@ -66,13 +72,12 @@ public class ClientService {
         client.setSurname(newClient.getSurname());
         client.setPhone(newClient.getPhone());
         client.setStatus(newClient.getStatus());
-   //     client.setUserId(newClient.getUserId());
         clientRepository.save(client);
-        return newClient.setClientId(client.getId());
+        return newClient.setId(client.getId());
     }
 
-
-    public void deleteClient(Long id) {
-        clientRepository.deleteById(id);
+    @Transactional
+    public void deleteClient(Long id, String login) {
+        clientRepository.deleteByIdAndUser_Login(id, login);
     }
 }

@@ -15,16 +15,19 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     public List<UserDTO> getAll(){
             return userRepository.findAll().stream()
                     .map(this::getUserDTO)
                     .collect(Collectors.toList());
     }
+
     public UserDTO getUserDTO(User user){
         return new UserDTO().setId(user.getId())
                 .setName(user.getName())
@@ -33,9 +36,12 @@ public class UserService {
                 .setPassword(user.getPassword())
                 .setRole(user.getRole());
     }
-    public UserDTO create(UserDTO userDTO){
+
+    public UserDTO create(UserDTO userDTO, String login){
+        User creator = userRepository.findByLogin(login).get();
+
         User user = new User()
-//                .setCreatorId(userDTO.getCreatorId())
+                .setCreatorId(creator.getId())
                 .setName(userDTO.getName())
                 .setLogin(userDTO.getLogin())
                 .setPassword(passwordEncoder.encode(userDTO.getPassword()))
@@ -43,6 +49,7 @@ public class UserService {
         userRepository.save(user);
         return userDTO.setId(user.getId());
     }
+
     public UserDTO getById(Long id){
         return userRepository.findById(id)
                 .map(this::getUserDTO)
@@ -51,17 +58,17 @@ public class UserService {
 
     public UserDTO update(UserDTO newUser, Long id){
         return userRepository.findById(id)
-                .map(user -> getUser(newUser, user))
+                .map(user -> updateUser(newUser, user))
                 .orElseThrow(()-> new UserNotFoundException("User not found " + id));
     }
-    private UserDTO getUser(UserDTO newUser, User user) {
-        user.setName(user.getName());
-//        user.setCreatorId(user.getCreatorId());
-        user.setLogin(user.getLogin());
-        user.setPassword(user.getPassword());
-        user.setRole(user.getRole());
+
+    private UserDTO updateUser(UserDTO newUser, User user) {
+        user.setName(newUser.getName());
+        user.setLogin(newUser.getLogin());
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        user.setRole(newUser.getRole());
         userRepository.save(user);
-        return newUser.setId(user.getId());
+        return newUser.setId(newUser.getId());
     }
 
     public void deleteUser(Long id) {

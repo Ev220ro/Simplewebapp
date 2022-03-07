@@ -7,13 +7,10 @@ import ru.rodionov.spring.enums.ClientStatus;
 @Data
 public class ClientDTO {
 
-    private Long clientId;
+    private Long id;
     private String name;
     private String surname;
     private String phone;
     private ClientStatus status;
-    private Long userId;
-
-
 
 }
