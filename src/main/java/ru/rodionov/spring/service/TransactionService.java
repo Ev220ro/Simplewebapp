@@ -30,14 +30,14 @@ public class TransactionService {
         return new TransactionDTO().setTransactionType(transaction.getType())
                 .setDateTimeTransaction(transaction.getDateTime())
                 .setClientId(transaction.getClient().getId())
-                .setSum(transaction.getAmount())
+                .setAmount(transaction.getAmount())
                 .setTransactionId(transaction.getId());
     }
 
     public TransactionDTO create(TransactionDTO transactionDTO) {
            Transaction transaction = new Transaction().setDateTime(transactionDTO.getDateTimeTransaction())
                    .setType(transactionDTO.getTransactionType())
-                   .setAmount(transactionDTO.getSum());
+                   .setAmount(transactionDTO.getAmount());
           // найти клиента по client_id и положить сюда        .setClient(transactionDTO.getClient());
            transactionRepository.save(transaction);
            return transactionDTO.setTransactionId(transaction.getId());
@@ -61,7 +61,6 @@ public class TransactionService {
         transaction.setType(transaction.getType());
         transaction.setAmount(transaction.getAmount());
         transaction.setDateTime(transaction.getDateTime());
-//        transaction.setClientId(transaction.getClientId());
         transactionRepository.save(transaction);
         return newTransactionDTO.setTransactionId(transaction.getId());
     }

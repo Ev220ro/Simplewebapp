@@ -12,9 +12,10 @@ public class TransactionDTO {
 
     private Long transactionId;
 
+
     private String dateTimeTransaction;
 
-    private BigDecimal sum;
+    private BigDecimal amount;
 
     private TransactionType transactionType;
 

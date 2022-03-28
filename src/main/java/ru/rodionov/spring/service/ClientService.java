@@ -12,6 +12,7 @@ import ru.rodionov.spring.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +28,15 @@ public class ClientService {
     }
 
     public List<ClientDTO> getAll(String login) {
-
         return clientRepository.findAllByUser_Login(login).stream()
+                .map(this::getClientDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ClientDTO> getAllMyWorkers(String login) { //get all clients to my workers
+        Optional<User> user = userRepository.findByLogin(login);
+        Long id = user.get().getId();
+        return clientRepository.findAllByUser_CreatorId(id).stream()
                 .map(this::getClientDTO)
                 .collect(Collectors.toList());
     }
@@ -38,7 +46,9 @@ public class ClientService {
                 .setName(client.getName())
                 .setSurname(client.getSurname())
                 .setPhone(client.getPhone())
-                .setStatus(client.getStatus());
+                .setStatus(client.getStatus())
+                .setDelays(client.getDelays())
+                .setIncome(client.getIncome());
     }
 
 
@@ -49,7 +59,9 @@ public class ClientService {
                 .setName(clientDTO.getName())
                 .setStatus(clientDTO.getStatus())
                 .setPhone(clientDTO.getPhone())
-                .setSurname(clientDTO.getSurname());
+                .setSurname(clientDTO.getSurname())
+                .setDelays(clientDTO.getDelays())
+                .setIncome(clientDTO.getIncome());
 
         clientRepository.save(client);
         return clientDTO.setId(client.getId());
@@ -72,6 +84,8 @@ public class ClientService {
         client.setSurname(newClient.getSurname());
         client.setPhone(newClient.getPhone());
         client.setStatus(newClient.getStatus());
+        client.setDelays(newClient.getDelays());
+        client.setIncome(newClient.getIncome());
         clientRepository.save(client);
         return newClient.setId(client.getId());
     }
@@ -79,5 +93,5 @@ public class ClientService {
     @Transactional
     public void deleteClient(Long id, String login) {
         clientRepository.deleteByIdAndUser_Login(id, login);
-    }
+    } //может ли удалять свои записи WORKER или такая функциональность у Менеджера?
 }

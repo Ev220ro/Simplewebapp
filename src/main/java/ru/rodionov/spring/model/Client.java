@@ -25,8 +25,10 @@ public class Client {
     @Column
     @Enumerated(value = EnumType.STRING)
     private ClientStatus status;
-//    @Column
-//    private Long userId;
+    @Column
+    private Long income;
+    @Column
+    private Long delays;
     @OneToMany(mappedBy = "client")
     private List<Transaction> transactionList = new ArrayList<>();
     @ManyToOne

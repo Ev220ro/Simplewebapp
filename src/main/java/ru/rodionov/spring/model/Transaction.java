@@ -19,7 +19,7 @@ public class Transaction {
     @Column
     private String dateTime;
     @Column
-    private BigDecimal  amount;
+    private BigDecimal amount;
     @Column
     @Enumerated(value = EnumType.STRING)
     private TransactionType type;

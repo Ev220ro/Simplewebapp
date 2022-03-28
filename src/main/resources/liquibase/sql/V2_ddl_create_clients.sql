@@ -8,7 +8,9 @@ CREATE TABLE clients
     surname varchar(25) NOT NULL,
     phone   varchar(15) NOT NULL,
     status  varchar(15) NOT NULL,
-    user_id BIGINT      NOT NULL
+    income BIGINT NOT NULL,
+    user_id BIGINT      NOT NULL,
+    delays BIGINT NOT NULL
 );
 
 ALTER TABLE clients

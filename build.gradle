@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.3'
+    id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     // tag::actuator[]
+    implementation platform('org.springframework.boot:spring-boot-dependencies:2.6.4')
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // end::actuator[]
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -20,7 +21,13 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     // tag::tests[]
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+
     // end::tests[]
     implementation 'org.postgresql:postgresql:42.1.4'
     implementation 'org.liquibase:liquibase-core:4.7.1'
@@ -29,6 +36,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation "org.testcontainers:testcontainers:1.15.1"
+    implementation "org.testcontainers:postgresql:1.15.1"
+
 
 
 

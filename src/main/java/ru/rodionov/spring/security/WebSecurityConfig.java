@@ -29,6 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        System.out.println(passwordEncoder().encode("string"));
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 
     }
@@ -44,11 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeHttpRequests()
+                .antMatchers("/user/**").hasAnyRole("ADMIN", "MANAGER")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(new String[]{
                         "/login/**",
-                        "/user/**",
-                        "/user",
+//                        "/user/**",
+//                        "/user",
                         "/swagger-resources/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",

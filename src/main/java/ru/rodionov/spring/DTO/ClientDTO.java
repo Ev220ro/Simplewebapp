@@ -12,5 +12,7 @@ public class ClientDTO {
     private String surname;
     private String phone;
     private ClientStatus status;
+    private Long income;
+    private Long delays;
 
 }

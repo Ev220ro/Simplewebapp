@@ -4,7 +4,7 @@
 CREATE TABLE actions
 (
     id        BIGSERIAL PRIMARY KEY,
-    data_time timestamp    NOT NULL DEFAULT now(),
+    date_time timestamp    NOT NULL DEFAULT now(),
     type      varchar(50)  NOT NULL,
     details   varchar(255) NOT NULL,
     user_id   BIGINT       NOT NULL
