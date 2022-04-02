@@ -39,7 +39,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     @PostMapping("/createWorker")
     public UserDTO createWorker(@RequestBody UserDTO userDTO, Authentication auth) {
-        return userService.create(userDTO, auth.getName(), UserRole.WORKER);
+        return userService.create(userDTO, auth.getName());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_MANAGER')")

@@ -24,8 +24,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public TransactionDTO create(@RequestBody TransactionDTO transactionDTO) {
-        return transactionService.create(transactionDTO);
+    public TransactionDTO create(@RequestBody TransactionDTO transactionDTO, @PathVariable Long id) {
+        return transactionService.create(transactionDTO, id);
     }
 
     @GetMapping("{id}")

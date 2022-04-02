@@ -20,6 +20,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+//    @Autowired
+//    UserRepository userRepository;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -56,17 +60,17 @@ public class UserService {
                 .setRole(user.getRole());
     }
 
-    public UserDTO create(UserDTO userDTO, String login, UserRole userRole) {
-        User creator = userRepository.findByLogin(login).get();
-        User user = new User()
-                .setCreatorId(creator.getId())
-                .setName(userDTO.getName())
-                .setLogin(userDTO.getLogin())
-                .setPassword(passwordEncoder.encode(userDTO.getPassword()))
-                .setRole(userRole);
-        userRepository.save(user);
-        return userDTO.setId(user.getId());
-    }
+//    public UserDTO create(UserDTO userDTO, String login, UserRole userRole) {
+//        User creator = userRepository.findByLogin(login).get();
+//        User user = new User()
+//                .setCreatorId(creator.getId())
+//                .setName(userDTO.getName())
+//                .setLogin(userDTO.getLogin())
+//                .setPassword(passwordEncoder.encode(userDTO.getPassword()))
+//                .setRole(userRole);
+//        userRepository.save(user);
+//        return userDTO.setId(user.getId());
+//    }
 
     public UserDTO create(UserDTO userDTO, String login) {
         User creator = userRepository.findByLogin(login).get();
