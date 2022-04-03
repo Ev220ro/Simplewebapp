@@ -39,7 +39,6 @@ public class ClientControllerTest extends IntegrationTest{
         Optional<Client> expectedClient = clientRepository.findById(response.getBody().getId());
         Assertions.assertTrue(expectedClient.isPresent());
 
-
     }
 
 }

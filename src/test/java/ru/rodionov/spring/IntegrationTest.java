@@ -79,4 +79,3 @@ public class IntegrationTest {
 
     }
 }
-//покрыть все контроллеры ИТ (positive)
