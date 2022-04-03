@@ -69,6 +69,26 @@ public class IntegrationTest {
         return headers;
     }
 
+    protected HttpHeaders getManagerHeader(){
+        User us = new User();
+        us.setLogin("manager");
+        us.setName("manager");
+        us.setRole(UserRole.MANAGER);
+        us.setPassword(passwordEncoder.encode("manager"));
+        userRepository.save(us);
+
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUserName("manager");
+        loginDTO.setPassword("manager");
+        HttpEntity<LoginDTO> tHttpEntity = new HttpEntity<>(loginDTO,new HttpHeaders());
+        ResponseEntity<String> exchange = testRestTemplate.exchange("/login", HttpMethod.POST, tHttpEntity, String.class);
+        String header = exchange.getBody();
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Authorization", List.of("Bearer " + header));
+        return headers;
+    }
+
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
