@@ -113,6 +113,7 @@ public class UserControllerTest extends IntegrationTest{
         HttpEntity<UserDTO> userDTOHttpEntity = new HttpEntity<>(userDTO, getManagerHeader());
         ResponseEntity<UserDTO[]> response = testRestTemplate.exchange("/user/getAllMy", HttpMethod.GET, userDTOHttpEntity, UserDTO[].class);
         Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
 
@@ -149,8 +150,135 @@ public class UserControllerTest extends IntegrationTest{
         ResponseEntity<UserDTO> response = testRestTemplate.exchange("/user/getById/{id}", HttpMethod.GET, userDTOHttpEntity, UserDTO.class, id);
         Assertions.assertNotNull(response.getBody());
         Assertions.assertEquals(id, response.getBody().getId());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
+
+    @Test
+    public void replaceUserTest(){
+
+        User us1 = new User();
+        us1.setLogin("manager");
+        us1.setName("manager");
+        us1.setRole(UserRole.MANAGER);
+        us1.setPassword(passwordEncoder.encode("manager"));
+        userRepository.save(us1);
+
+        User us2 = new User();
+        us2.setLogin("manager2");
+        us2.setName("manager2");
+        us2.setRole(UserRole.MANAGER);
+        us2.setPassword(passwordEncoder.encode("manager2"));
+        UserDTO userDTO1 = userService.getUserDTO(us2);
+        HttpEntity<UserDTO> userDTOHttpEntity = new HttpEntity<>(userDTO1, getAdminHeader());
+
+        long id = us1.getId();
+        ResponseEntity<UserDTO> response = testRestTemplate.exchange("/user/{id}", HttpMethod.PUT, userDTOHttpEntity, UserDTO.class, id);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void replaceMyUserTest(){
+
+        User us = new User();
+        us.setLogin("manager");
+        us.setName("manager");
+        us.setRole(UserRole.MANAGER);
+        us.setPassword(passwordEncoder.encode("manager"));
+        userRepository.save(us);
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUserName("manager");
+        loginDTO.setPassword("manager");
+        HttpEntity<LoginDTO> tHttpEntity = new HttpEntity<>(loginDTO,new HttpHeaders());
+        ResponseEntity<String> exchange = testRestTemplate.exchange("/login", HttpMethod.POST, tHttpEntity, String.class);
+        String header = exchange.getBody();
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Authorization", List.of("Bearer " + header));
+
+        UserDTO userDTO = userService.getUserDTO(us);
+
+
+        User us1 = new User();
+        us1.setLogin("worker1");
+        us1.setName("worker1");
+        us1.setRole(UserRole.WORKER);
+        us1.setPassword(passwordEncoder.encode("worker1"));
+        us1.setCreatorId(userDTO.getId());
+        userRepository.save(us1);
+
+        User us2 = new User();
+        us2.setLogin("worker2");
+        us2.setName("worker2");
+        us2.setRole(UserRole.WORKER);
+        us2.setPassword(passwordEncoder.encode("worker2"));
+        UserDTO userDTO1 = userService.getUserDTO(us2);
+        HttpEntity<UserDTO> userDTOHttpEntity = new HttpEntity<>(userDTO1, headers);
+
+
+        long id = us1.getId();
+        ResponseEntity<UserDTO> response = testRestTemplate.exchange("/user/updateMyUser/{id}", HttpMethod.PUT, userDTOHttpEntity, UserDTO.class, id);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+
+    }
+
+    @Test
+    public void deleteUserTest(){
+        User us1 = new User();
+        us1.setLogin("admin1");
+        us1.setName("admin1");
+        us1.setRole(UserRole.ADMIN);
+        us1.setPassword(passwordEncoder.encode("admin1"));
+        userRepository.save(us1);
+
+        UserDTO userDTO = new UserDTO();
+        HttpEntity<UserDTO> userDTOHttpEntity = new HttpEntity<>(userDTO, getAdminHeader());
+
+        long id = us1.getId();
+        ResponseEntity<UserDTO> response = testRestTemplate.exchange("/user/{id}", HttpMethod.DELETE, userDTOHttpEntity, UserDTO.class, id);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void deleteMyUserTest(){
+        User us = new User();
+        us.setLogin("manager");
+        us.setName("manager");
+        us.setRole(UserRole.MANAGER);
+        us.setPassword(passwordEncoder.encode("manager"));
+        userRepository.save(us);
+
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUserName("manager");
+        loginDTO.setPassword("manager");
+        HttpEntity<LoginDTO> tHttpEntity = new HttpEntity<>(loginDTO,new HttpHeaders());
+        ResponseEntity<String> exchange = testRestTemplate.exchange("/login", HttpMethod.POST, tHttpEntity, String.class);
+        String header = exchange.getBody();
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Authorization", List.of("Bearer " + header));
+
+        UserDTO userDTO = userService.getUserDTO(us);
+        HttpEntity<UserDTO> userDTOHttpEntity = new HttpEntity<>(userDTO, headers);
+
+        User us1 = new User();
+        us1.setLogin("worker1");
+        us1.setName("worker1");
+        us1.setRole(UserRole.WORKER);
+        us1.setPassword(passwordEncoder.encode("worker1"));
+        us1.setCreatorId(userDTO.getId());
+        userRepository.save(us1);
+
+        long id = us1.getId();
+        ResponseEntity<UserDTO> response = testRestTemplate.exchange("/user/deleteMyUser/{id}", HttpMethod.DELETE, userDTOHttpEntity, UserDTO.class, id);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+
+
+
+
 
 
 }

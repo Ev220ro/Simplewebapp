@@ -60,17 +60,6 @@ public class UserService {
                 .setRole(user.getRole());
     }
 
-//    public UserDTO create(UserDTO userDTO, String login, UserRole userRole) {
-//        User creator = userRepository.findByLogin(login).get();
-//        User user = new User()
-//                .setCreatorId(creator.getId())
-//                .setName(userDTO.getName())
-//                .setLogin(userDTO.getLogin())
-//                .setPassword(passwordEncoder.encode(userDTO.getPassword()))
-//                .setRole(userRole);
-//        userRepository.save(user);
-//        return userDTO.setId(user.getId());
-//    }
 
     public UserDTO create(UserDTO userDTO, String login) {
         User creator = userRepository.findByLogin(login).get();
@@ -97,7 +86,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found " + id));
     }
 
-    public UserDTO updateMy(UserDTO newUser, Long id, String login){ //restrict the user's role to WORKER
+    public UserDTO updateMy(String login, UserDTO newUser, Long id){ //restrict the user's role to WORKER
         User myUser = userRepository.findByLogin(login).get();
         return userRepository.findByCreatorIdAndId(myUser.getId(), id)
                 .map(user -> updateUser(newUser, user))

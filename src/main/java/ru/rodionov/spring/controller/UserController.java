@@ -75,7 +75,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     @PutMapping("/updateMyUser/{id}")
     public UserDTO replaceMyUser(@RequestBody UserDTO newUser, @PathVariable Long id, Authentication auth){
-        return userService.updateMy(newUser, id, auth.getName());
+        return userService.updateMy(auth.getName(), newUser, id);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -84,14 +84,9 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    //put -> id + new User
-    //delete -> id
-    //clients + histor transaction
+
     //http://localhost:8080/swagger-ui/index.html
 
-    //Добавить сервисы
-    //отдельный проект авторизация - > логаут (одна сущность)
-    //расписать ролевую модель (кто что может делать? добавить проверки ролевой модели)
 
 
 }
