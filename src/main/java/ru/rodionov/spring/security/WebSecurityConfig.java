@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println(passwordEncoder().encode("string"));
+//        System.out.println(passwordEncoder().encode("string"));
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 
     }
